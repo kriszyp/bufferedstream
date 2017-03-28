@@ -291,8 +291,14 @@ BufferedStream.prototype = Object.create(BaseClass.prototype, {
     if (typeof chunk === 'string')
       chunk = bodec.fromString(chunk, arguments[1]);
 
-    if (!bodec.isBinary(chunk))
-      throw new Error('BufferedStream only accepts binary data');
+    if (!bodec.isBinary(chunk)) {
+      console.error('BufferedStream only accepts binary data, got ' + chunk);
+      if (chunk) {
+        chunk = chunk.toString('utf8')
+      } else {
+        chunk = new Buffer([])
+      }
+    }
 
     this._chunks.push(chunk);
     this.size += chunk.length;
